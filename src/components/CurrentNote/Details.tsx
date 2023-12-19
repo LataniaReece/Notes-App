@@ -1,4 +1,6 @@
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const mockData = {
   id: 1,
@@ -19,26 +21,45 @@ const styles = {
 };
 
 const Details = () => {
+  const { currentNote } = useSelector((state: RootState) => state.notes);
   return (
-    <div className={styles.wrapper}>
-      <h2 className={styles.title}>{mockData.title}</h2>
-      <div className={styles.detailItem}>
-        <p className={styles.detailItemLabel}>Last Modified</p>
-        <p className={styles.detailItemValue}>
-          {format(mockData.date, "dd MMMM, yyyy")}
-        </p>
-      </div>
-      <div className={styles.detailItem}>
-        <p className={styles.detailItemLabel}>Tags</p>
-        <div className={styles.tagsContainer}>
-          {mockData.tags.map((tag) => (
-            <p key={tag} className={styles.tagItem}>
-              {tag}
-            </p>
-          ))}
+    <>
+      {currentNote ? (
+        <div className={styles.wrapper}>
+          <div>
+            <h2 className={styles.title}>{currentNote.title}</h2>
+          </div>
+
+          {/* Last Modified */}
+          {currentNote.updated_at && (
+            <div className={styles.detailItem}>
+              <p className={styles.detailItemLabel}>Last Modified</p>
+              <p className={styles.detailItemValue}>
+                {format(mockData.date, "dd MMMM, yyyy")}
+              </p>
+            </div>
+          )}
+
+          {/* Tags */}
+          <div className={styles.detailItem}>
+            <p className={styles.detailItemLabel}>Tags</p>
+            {currentNote.tags.length > 0 ? (
+              <div className={styles.tagsContainer}>
+                {mockData.tags.map((tag) => (
+                  <p key={tag} className={styles.tagItem}>
+                    {tag}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <p>Add Tags</p>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <p>No Note Found </p>
+      )}
+    </>
   );
 };
 

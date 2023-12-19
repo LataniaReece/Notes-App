@@ -1,5 +1,5 @@
-import AddNote from "./MyNotes/AddNote";
-import NotesList from "./MyNotes/NotesList";
+import AddNoteButton from "./AddNoteButton";
+import NotesList from "./NotesList";
 
 const styles = {
   heading: "text-4xl mb-4",
@@ -9,7 +9,7 @@ const MyNotes = () => {
   return (
     <>
       <h2 className={styles.heading}>My Notes</h2>
-      <AddNote />
+      <AddNoteButton />
       <NotesList />
     </>
   );

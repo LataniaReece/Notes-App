@@ -1,17 +1,19 @@
 import classnames from "classnames";
-import CurrentNote from "./components/CurrentNote";
-import MyNotes from "./components/MyNotes";
+import CurrentNote from "./components/CurrentNote/CurrentNote";
+import MyNotes from "./components/MyNotes/MyNotes";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 
 const App = () => {
-  const hasCurrentNote: boolean = true;
+  const { currentNote } = useSelector((state: RootState) => state.notes);
 
   const styles = {
     wrapper: "h-screen grid grid-cols-12 gap-7 p-5",
     myNotes: classnames({
-      "col-span-12 md:col-span-4 lg:col-span-3": hasCurrentNote,
-      "col-span-12 md:col-span-12 lg:col-span-9": !hasCurrentNote,
+      "col-span-12 md:col-span-4 lg:col-span-3": currentNote,
+      "col-span-12 md:col-span-12 lg:col-span-12": !currentNote,
     }),
-    currentNote: "col-span-8 h-full",
+    currentNote: "col-span-12 md:col-span-8 lg:col-span-9 h-full",
   };
 
   return (
@@ -19,7 +21,7 @@ const App = () => {
       <div className={styles.myNotes}>
         <MyNotes />
       </div>
-      {hasCurrentNote && (
+      {currentNote && (
         <div className={styles.currentNote}>
           <CurrentNote />
         </div>
