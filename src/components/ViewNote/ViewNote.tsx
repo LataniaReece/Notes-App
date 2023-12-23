@@ -9,7 +9,12 @@ import Tags from "./Tags";
 import Title from "./Title";
 import ViewNoteActions from "./ViewNoteActions";
 import { RootState } from "../../store";
-import { addNote, updateNote } from "../../slices/notesSlice";
+import {
+  addNote,
+  setIsViewingNote,
+  setNoteInView,
+  updateNote,
+} from "../../slices/notesSlice";
 
 const styles = {
   wrapper: "p-2 h-full",
@@ -74,6 +79,9 @@ const ViewNote = () => {
         })
       );
     }
+
+    dispatch(setNoteInView(null));
+    dispatch(setIsViewingNote(false));
   };
 
   return (
