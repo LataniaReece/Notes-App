@@ -2,18 +2,18 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Note } from "./notesTypes";
 
 interface NotesStateType {
-  currentNote: Note | null;
-  notes: Note[] | [];
+  notes: Note[];
+  isViewingNote: boolean;
+  noteInView: Note | "new" | null;
 }
 
-// Check localStorage for inital state or set to empty values
 const getInitialState = (): NotesStateType => {
-  const storedCurrentNote = localStorage.getItem("currentNote");
   const storedNotes = localStorage.getItem("notes");
 
   const initialState: NotesStateType = {
-    currentNote: storedCurrentNote ? JSON.parse(storedCurrentNote) : null,
+    noteInView: null,
     notes: storedNotes ? JSON.parse(storedNotes) : [],
+    isViewingNote: false,
   };
 
   return initialState;
@@ -27,24 +27,35 @@ const notesSlice = createSlice({
   reducers: {
     addNote: (state, action: PayloadAction<Note>) => {
       state.notes = [...state.notes, action.payload];
+      localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     removeNote: (state, action: PayloadAction<string>) => {
       const noteIdToRemove = action.payload;
       state.notes = state.notes.filter((note) => note.id !== noteIdToRemove);
+      localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     updateNote: (state, action: PayloadAction<Note>) => {
       const updatedNote = action.payload;
       state.notes = state.notes.map((note) =>
         note.id === updatedNote.id ? updatedNote : note
       );
+      localStorage.setItem("notes", JSON.stringify(state.notes));
     },
-    setCurrentNote: (state, action: PayloadAction<Note | null>) => {
-      state.currentNote = action.payload;
+    setNoteInView: (state, action: PayloadAction<Note | "new" | null>) => {
+      state.noteInView = action.payload;
+    },
+    setIsViewingNote: (state, action: PayloadAction<boolean>) => {
+      state.isViewingNote = action.payload;
     },
   },
 });
 
-export const { addNote, removeNote, updateNote, setCurrentNote } =
-  notesSlice.actions;
+export const {
+  addNote,
+  removeNote,
+  updateNote,
+  setNoteInView,
+  setIsViewingNote,
+} = notesSlice.actions;
 
 export default notesSlice.reducer;

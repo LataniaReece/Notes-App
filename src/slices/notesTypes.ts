@@ -1,5 +1,5 @@
 export type Note = {
-  id: string;
+  id: string | null;
   title: string;
   text: string;
   tags: string[];

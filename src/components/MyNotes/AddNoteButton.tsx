@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-import { setCurrentNote } from "../../slices/notesSlice";
+import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 
 const styles = {
   button:
@@ -11,15 +10,8 @@ const AddNote = () => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    const newEmptyNote = {
-      id: uuidv4(),
-      title: "New Note",
-      text: "Add note details",
-      tags: [],
-      created_at: null,
-      updated_at: null,
-    };
-    dispatch(setCurrentNote(newEmptyNote));
+    dispatch(setNoteInView("new"));
+    dispatch(setIsViewingNote(true));
   };
 
   return (
