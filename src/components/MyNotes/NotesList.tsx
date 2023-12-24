@@ -5,9 +5,9 @@ import DOMPurify from "dompurify";
 import { Note } from "../../slices/notesTypes";
 import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 import classnames from "classnames";
+import Pagination from "./Pagination";
 
 const styles = {
-  wrapper: "pb-10",
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
   unSelectedNoteItem: "bg-gray-50 hover:bg-gray-100",
   selectedNoteItem: "bg-gray-100",
@@ -21,12 +21,19 @@ const styles = {
 };
 
 const NotesList = () => {
-  const { notes, noteInView } = useSelector((state: RootState) => state.notes);
+  const { notes, noteInView, currentPage, itemsPerPage } = useSelector(
+    (state: RootState) => state.notes
+  );
   const dispatch = useDispatch();
 
   if (!notes || notes.length === 0) {
     return <p>No Notes found</p>;
   }
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const paginatedNotes = notes.slice(startIndex, endIndex);
 
   const handleViewNote = (note: Note) => {
     if (note) {
@@ -36,8 +43,8 @@ const NotesList = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      {notes.map((note) => (
+    <>
+      {paginatedNotes.map((note) => (
         <div
           className={classnames(styles.noteItem, {
             [styles.unSelectedNoteItem]:
@@ -77,7 +84,8 @@ const NotesList = () => {
           </div>
         </div>
       ))}
-    </div>
+      <Pagination totalItems={notes.length} itemsPerPage={itemsPerPage} />
+    </>
   );
 };
 

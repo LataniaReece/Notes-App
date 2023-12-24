@@ -6,6 +6,8 @@ interface NotesStateType {
   notes: Note[];
   isViewingNote: boolean;
   noteInView: Note | "new" | null;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
 const getInitialState = (): NotesStateType => {
@@ -15,6 +17,8 @@ const getInitialState = (): NotesStateType => {
     noteInView: null,
     notes: storedNotes ? JSON.parse(storedNotes) : data,
     isViewingNote: false,
+    currentPage: 1,
+    itemsPerPage: 5,
   };
 
   return initialState;
@@ -48,6 +52,9 @@ const notesSlice = createSlice({
     setIsViewingNote: (state, action: PayloadAction<boolean>) => {
       state.isViewingNote = action.payload;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
 });
 
@@ -57,6 +64,7 @@ export const {
   updateNote,
   setNoteInView,
   setIsViewingNote,
+  setCurrentPage,
 } = notesSlice.actions;
 
 export default notesSlice.reducer;
