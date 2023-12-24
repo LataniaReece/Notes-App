@@ -104,6 +104,7 @@ const ViewNote = () => {
       <Title
         selectedTitle={selectedTitle}
         setSelectedTitle={setSelectedTitle}
+        autoFocus={noteInView === "new"}
       />
       {noteInView && noteInView !== "new" && noteInView.updated_at && (
         <div className={styles.dateWrapper}>

@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 interface TitleProps {
   selectedTitle: string;
   setSelectedTitle: React.Dispatch<React.SetStateAction<string>>;
+  autoFocus: boolean;
 }
 
 const styles = {
@@ -9,10 +10,23 @@ const styles = {
   input: "text-4xl w-full mb-3 focus:outline-none",
 };
 
-const Title: FC<TitleProps> = ({ selectedTitle, setSelectedTitle }) => {
+const Title: FC<TitleProps> = ({
+  selectedTitle,
+  setSelectedTitle,
+  autoFocus,
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
+
   return (
     <div className={styles.wrapper}>
       <input
+        ref={inputRef}
         placeholder="Untitled"
         value={selectedTitle}
         onChange={(e) => setSelectedTitle(e.target.value)}
