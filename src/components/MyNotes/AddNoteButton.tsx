@@ -3,7 +3,7 @@ import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 
 const styles = {
   button:
-    "rounded-full bg-gray-200 font-light px-4 py-2 mb-4 hover:bg-gray-300 transition duration-200",
+    "rounded-lg bg-gray-200 font-light px-5 py-2 mb-4 hover:bg-gray-300 transition duration-200",
 };
 
 const AddNote = () => {

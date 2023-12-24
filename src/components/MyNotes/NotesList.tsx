@@ -1,46 +1,72 @@
 import { format } from "date-fns";
-
-const mockNotes = [
-  {
-    id: 1,
-    date: new Date("2023-01-01T00:00:00"),
-    title: "Exploration Ideas",
-    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ",
-    tags: ["Design", "Productivity", "Training"],
-  },
-  {
-    id: 2,
-    date: new Date("2023-04-12T00:00:00"),
-    title: "Database Systems Week 4",
-    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ",
-    tags: ["College", "Lecture", "Daily", "Study"],
-  },
-  {
-    id: 3,
-    date: new Date("2023-04-19T00:00:00"),
-    title: "Grocery List",
-    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ",
-    tags: ["Shopping", "List"],
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import DOMPurify from "dompurify";
+import { Note } from "../../slices/notesTypes";
+import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
+import classnames from "classnames";
 
 const styles = {
-  noteItem: "bg-gray-50 mb-2 p-3",
+  noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
+  unSelectedNoteItem: "bg-gray-50 hover:bg-gray-100",
+  selectedNoteItem: "bg-gray-100",
   date: "uppercase text-xs text-gray-400 font-extralight",
-  title: "text-slate-500 font-normal",
-  text: "overflow-hidden whitespace-nowrap overflow-ellipsis font-extralight",
+  title: "text-gray-500 ",
+  selectedTitle: "font-bold",
+  text: " text-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis font-light mb-3 text-sm",
+  selectedText: "font-normal",
   tagsContainer: "flex gap-2",
-  tagItem: "bg-gray-100 p-1 font-extralight text-xs",
+  tagItem: "rounded-lg bg-gray-100 p-1 font-extralight text-xs",
 };
 
 const NotesList = () => {
+  const { notes, noteInView } = useSelector((state: RootState) => state.notes);
+  const dispatch = useDispatch();
+
+  if (!notes || notes.length === 0) {
+    return <p>No Notes found</p>;
+  }
+
+  const handleViewNote = (note: Note) => {
+    if (note) {
+      dispatch(setNoteInView(note));
+      dispatch(setIsViewingNote(true));
+    }
+  };
+
   return (
     <>
-      {mockNotes.map((note) => (
-        <div className={styles.noteItem} key={note.id}>
-          <p className={styles.date}>{format(note.date, "dd MMM")}</p>
-          <p className={styles.title}>{note.title}</p>
-          <p className={styles.text}>{note.text}</p>
+      {notes.map((note) => (
+        <div
+          className={classnames(styles.noteItem, {
+            [styles.unSelectedNoteItem]:
+              !noteInView ||
+              noteInView === "new" ||
+              (noteInView && note.id !== noteInView.id),
+            [styles.selectedNoteItem]:
+              noteInView && noteInView !== "new" && note.id === noteInView.id,
+          })}
+          key={note.id}
+          onClick={() => handleViewNote(note)}
+        >
+          <p className={styles.date}>
+            {format(new Date(note.updated_at), "dd MMM")}
+          </p>
+          <p
+            className={classnames(styles.title, {
+              [styles.selectedTitle]:
+                noteInView && noteInView !== "new" && note.id === noteInView.id,
+            })}
+          >
+            {note.title}
+          </p>
+          <div
+            className={classnames(styles.text, {
+              [styles.selectedText]:
+                noteInView && noteInView !== "new" && note.id === noteInView.id,
+            })}
+            dangerouslySetInnerHTML={sanitizeAndRenderHTML(note.text)}
+          />
           <div className={styles.tagsContainer}>
             {note.tags.map((tag) => (
               <p key={tag} className={styles.tagItem}>
@@ -52,6 +78,19 @@ const NotesList = () => {
       ))}
     </>
   );
+};
+
+const sanitizeAndRenderHTML = (htmlString: string) => {
+  const sanitizedHTML = DOMPurify.sanitize(htmlString);
+  const div = document.createElement("div");
+  div.innerHTML = sanitizedHTML;
+
+  // Concatenate the text content of all child nodes (ignoring HTML tags)
+  const concatenatedText = Array.from(div.childNodes)
+    .map((child) => child.textContent || "")
+    .join("");
+
+  return { __html: concatenatedText };
 };
 
 export default NotesList;

@@ -13,9 +13,10 @@ const styles = {
   heading: "font-extralight underline hover:no-underline",
   tagsContainer: "flex gap-2",
   tagItem:
-    "bg-gray-100 p-1 font-light text-sm select-none cursor-pointer py-0.5",
-  selectedTag: "bg-gray-300 border border-transparent",
-  unselectedTag: "bg-transparent border text-gray-500 border-gray-500",
+    "rounded-lg p-1 font-light text-sm select-none cursor-pointer py-0.5 border border-transparent hover:border-gray-400 hover:text-black",
+  selectedTag:
+    "border border-gray-400 text-black bg-gray-100 hover:bg-transparent",
+  unselectedTag: "bg-transparent text-gray-500 border-gray-500",
   selectTagsContainer: "flex gap-2 ml-30 font-extralight items-center mb-2",
   helper: "text-xs text-gray-400 italic font-extralight",
   buttonsContainer: "flex gap-2",

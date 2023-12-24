@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { v4 as uuid4 } from "uuid";
@@ -18,7 +18,7 @@ import {
 
 const styles = {
   wrapper: "p-2 h-full",
-  dateWrapper: "flex justify-between w-80 mb-3",
+  dateWrapper: "flex gap-3 mb-3",
   dateLabel: "font-extralight",
   dateValue: "font-light",
   alert: "mt-3 bg-red-50 border border-red-300 text-red-400 px-4 py-3",
@@ -84,6 +84,20 @@ const ViewNote = () => {
     dispatch(setIsViewingNote(false));
   };
 
+  useEffect(() => {
+    // Update state when a new noteInView is set
+    if (noteInView && noteInView !== "new") {
+      setSelectedTags(noteInView.tags || []);
+      setSelectedTitle(noteInView.title || "");
+      setSelectedText(noteInView.text || "");
+    } else {
+      // Reset state if noteInView is "new"
+      setSelectedTags([]);
+      setSelectedTitle("");
+      setSelectedText("");
+    }
+  }, [noteInView]);
+
   return (
     <div className={styles.wrapper}>
       <Breadcrumb />
@@ -93,10 +107,10 @@ const ViewNote = () => {
       />
       {noteInView && noteInView !== "new" && noteInView.updated_at && (
         <div className={styles.dateWrapper}>
-          <p className={styles.dateLabel}>Last Modified</p>
+          <p className={styles.dateLabel}>Last Modified:</p>
           <p className={styles.dateValue}>
             {noteInView &&
-              format(new Date(noteInView.updated_at), "dd MMMM, yyyy")}
+              format(new Date(noteInView.updated_at), "MMMM dd, yyyy h:mm a")}
           </p>
         </div>
       )}

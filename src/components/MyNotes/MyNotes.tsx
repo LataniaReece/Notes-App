@@ -2,7 +2,7 @@ import AddNoteButton from "./AddNoteButton";
 import NotesList from "./NotesList";
 
 const styles = {
-  heading: "text-4xl mb-4",
+  heading: "text-4xl mb-7",
 };
 
 const MyNotes = () => {
