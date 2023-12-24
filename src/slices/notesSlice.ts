@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Note } from "./notesTypes";
+import { data } from "./intialData";
 
 interface NotesStateType {
   notes: Note[];
@@ -12,7 +13,7 @@ const getInitialState = (): NotesStateType => {
 
   const initialState: NotesStateType = {
     noteInView: null,
-    notes: storedNotes ? JSON.parse(storedNotes) : [],
+    notes: storedNotes ? JSON.parse(storedNotes) : data,
     isViewingNote: false,
   };
 

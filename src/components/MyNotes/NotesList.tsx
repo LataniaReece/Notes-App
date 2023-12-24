@@ -7,6 +7,7 @@ import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 import classnames from "classnames";
 
 const styles = {
+  wrapper: "pb-10",
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
   unSelectedNoteItem: "bg-gray-50 hover:bg-gray-100",
   selectedNoteItem: "bg-gray-100",
@@ -35,7 +36,7 @@ const NotesList = () => {
   };
 
   return (
-    <>
+    <div className={styles.wrapper}>
       {notes.map((note) => (
         <div
           className={classnames(styles.noteItem, {
@@ -76,7 +77,7 @@ const NotesList = () => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
