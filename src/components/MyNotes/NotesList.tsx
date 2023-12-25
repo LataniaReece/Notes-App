@@ -1,11 +1,20 @@
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import DOMPurify from "dompurify";
-import { Note } from "../../slices/notesTypes";
-import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 import classnames from "classnames";
+import DOMPurify from "dompurify";
+import { IoMdClose } from "react-icons/io";
+import { toast } from "react-toastify";
+
 import Pagination from "./Pagination";
+import EmptyNotesDisplay from "./EmptyNotesDisplay";
+import { Note } from "../../slices/notesTypes";
+import {
+  clearAllNotes,
+  deleteNote,
+  setIsViewingNote,
+  setNoteInView,
+} from "../../slices/notesSlice";
 
 const styles = {
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
@@ -18,6 +27,9 @@ const styles = {
   selectedText: "font-normal",
   tagsContainer: "flex gap-2",
   tagItem: "rounded-lg bg-gray-100 p-1 font-extralight text-xs",
+  footer: "flex justify-between items-center",
+  clearButton:
+    "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 hover:bg-gray-800",
 };
 
 const NotesList = () => {
@@ -27,7 +39,7 @@ const NotesList = () => {
   const dispatch = useDispatch();
 
   if (!notes || notes.length === 0) {
-    return <p>No Notes found</p>;
+    return <EmptyNotesDisplay />;
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -39,6 +51,28 @@ const NotesList = () => {
     if (note) {
       dispatch(setNoteInView(note));
       dispatch(setIsViewingNote(true));
+    }
+  };
+
+  const handleClearNotes = () => {
+    if (window.confirm("Are you sure you want to clear all notes?")) {
+      dispatch(clearAllNotes());
+      toast.success("Notes cleared!");
+    }
+  };
+
+  const handleDeleteNote = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    note: Note
+  ) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete "${note.title}"`)) {
+      if (note && note.id) {
+        dispatch(deleteNote(note.id));
+        toast.success(`Note deleted!`);
+      } else {
+        toast.error(`Error. Please try again.`);
+      }
     }
   };
 
@@ -57,9 +91,14 @@ const NotesList = () => {
           key={note.id}
           onClick={() => handleViewNote(note)}
         >
-          <p className={styles.date}>
-            {format(new Date(note.updated_at), "dd MMM")}
-          </p>
+          <div className="flex justify-between">
+            <p className={styles.date}>
+              {format(new Date(note.updated_at), "MM/dd/yy h:mm a")}
+            </p>
+            <button onClick={(e) => handleDeleteNote(e, note)}>
+              <IoMdClose />
+            </button>
+          </div>
           <p
             className={classnames(styles.title, {
               [styles.selectedTitle]:
@@ -84,7 +123,12 @@ const NotesList = () => {
           </div>
         </div>
       ))}
-      <Pagination totalItems={notes.length} itemsPerPage={itemsPerPage} />
+      <div className={styles.footer}>
+        <button onClick={handleClearNotes} className={styles.clearButton}>
+          Clear all notes
+        </button>
+        <Pagination totalItems={notes.length} itemsPerPage={itemsPerPage} />
+      </div>
     </>
   );
 };

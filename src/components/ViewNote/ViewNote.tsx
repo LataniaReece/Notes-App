@@ -15,6 +15,7 @@ import {
   setNoteInView,
   updateNote,
 } from "../../slices/notesSlice";
+import { toast } from "react-toastify";
 
 const styles = {
   wrapper: "p-2 h-full",
@@ -53,7 +54,7 @@ const ViewNote = () => {
       return;
     }
 
-    const formattedNow = format(new Date(), "MM-dd-yyyy HH:mm");
+    const formattedNow = format(new Date(), "MM-dd-yyyy HH:mm:ss");
 
     // If new note in view add note
     if (noteInView === "new") {
@@ -67,6 +68,7 @@ const ViewNote = () => {
           created_at: formattedNow,
         })
       );
+      toast.success("New note added!");
     } else {
       // Note is not new so update note
       dispatch(
@@ -78,6 +80,7 @@ const ViewNote = () => {
           updated_at: formattedNow,
         })
       );
+      toast.success("Note updated!");
     }
 
     dispatch(setNoteInView(null));

@@ -13,9 +13,22 @@ interface NotesStateType {
 const getInitialState = (): NotesStateType => {
   const storedNotes = localStorage.getItem("notes");
 
+  let sortedNotes: Note[] = [];
+
+  if (storedNotes && JSON.parse(storedNotes).length > 0) {
+    const parsedNotes: Note[] = JSON.parse(storedNotes);
+    sortedNotes = parsedNotes.sort((a, b) => {
+      const dateA = new Date(a.updated_at).getTime();
+      const dateB = new Date(b.updated_at).getTime();
+      return dateB - dateA;
+    });
+  } else {
+    sortedNotes = data;
+  }
+
   const initialState: NotesStateType = {
     noteInView: null,
-    notes: storedNotes ? JSON.parse(storedNotes) : data,
+    notes: sortedNotes,
     isViewingNote: false,
     currentPage: 1,
     itemsPerPage: 5,
@@ -31,20 +44,22 @@ const notesSlice = createSlice({
   initialState,
   reducers: {
     addNote: (state, action: PayloadAction<Note>) => {
-      state.notes = [...state.notes, action.payload];
+      state.notes = [action.payload, ...state.notes];
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
-    removeNote: (state, action: PayloadAction<string>) => {
+    deleteNote: (state, action: PayloadAction<string>) => {
       const noteIdToRemove = action.payload;
       state.notes = state.notes.filter((note) => note.id !== noteIdToRemove);
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     updateNote: (state, action: PayloadAction<Note>) => {
       const updatedNote = action.payload;
-      state.notes = state.notes.map((note) =>
-        note.id === updatedNote.id ? updatedNote : note
-      );
-      localStorage.setItem("notes", JSON.stringify(state.notes));
+      const updatedNotes = [
+        updatedNote,
+        ...state.notes.filter((note) => note.id !== updatedNote.id),
+      ];
+      state.notes = updatedNotes;
+      localStorage.setItem("notes", JSON.stringify(updatedNotes));
     },
     setNoteInView: (state, action: PayloadAction<Note | "new" | null>) => {
       state.noteInView = action.payload;
@@ -55,16 +70,21 @@ const notesSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    clearAllNotes: (state) => {
+      state.notes = [];
+      localStorage.setItem("notes", JSON.stringify(state.notes));
+    },
   },
 });
 
 export const {
   addNote,
-  removeNote,
+  deleteNote,
   updateNote,
   setNoteInView,
   setIsViewingNote,
   setCurrentPage,
+  clearAllNotes,
 } = notesSlice.actions;
 
 export default notesSlice.reducer;

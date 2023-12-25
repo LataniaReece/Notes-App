@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import classnames from "classnames";
+import "react-toastify/dist/ReactToastify.css";
 
 import MyNotes from "./components/MyNotes/MyNotes";
 import ViewNote from "./components/ViewNote/ViewNote";
+import CustomToastContainer from "./components/CustomToastContainer";
 
 const App = () => {
   const { isViewingNote } = useSelector((state: RootState) => state.notes);
@@ -18,16 +20,19 @@ const App = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.myNotes}>
-        <MyNotes />
-      </div>
-      {isViewingNote && (
-        <div className={styles.currentNote}>
-          <ViewNote />
+    <>
+      <div className={styles.wrapper}>
+        <div className={styles.myNotes}>
+          <MyNotes />
         </div>
-      )}
-    </div>
+        {isViewingNote && (
+          <div className={styles.currentNote}>
+            <ViewNote />
+          </div>
+        )}
+      </div>
+      <CustomToastContainer />
+    </>
   );
 };
 
