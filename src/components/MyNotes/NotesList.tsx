@@ -18,18 +18,21 @@ import {
 
 const styles = {
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
-  unSelectedNoteItem: "bg-gray-50 hover:bg-gray-100",
-  selectedNoteItem: "bg-gray-100",
-  date: "uppercase text-xs text-gray-400 font-extralight",
-  title: "text-gray-500 ",
+  unSelectedNoteItem:
+    "bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600",
+  selectedNoteItem: "bg-gray-100 dark:bg-gray-600",
+  date: "uppercase text-xs text-gray-400 font-extralight dark:text-slate-400",
+  title: "text-gray-500 dark:text-gray-100",
   selectedTitle: "font-bold",
-  text: " text-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis font-light mb-3 text-sm",
+  text: " text-gray-500 dark:text-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis font-light mb-3 text-sm",
   selectedText: "font-normal",
   tagsContainer: "flex gap-2",
-  tagItem: "rounded-lg bg-gray-100 p-1 font-extralight text-xs",
+  tagItem:
+    "rounded-lg bg-gray-100 dark:bg-gray-600 p-1 font-extralight text-xs",
+  selectedTagItem: "bg-gray-100 dark:bg-gray-500",
   footer: "flex justify-between items-center",
   clearButton:
-    "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 hover:bg-gray-800",
+    "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600",
 };
 
 const NotesList = () => {
@@ -95,7 +98,10 @@ const NotesList = () => {
             <p className={styles.date}>
               {format(new Date(note.updated_at), "MM/dd/yy h:mm a")}
             </p>
-            <button onClick={(e) => handleDeleteNote(e, note)}>
+            <button
+              onClick={(e) => handleDeleteNote(e, note)}
+              className="border border-transparent hover:gray hover:border-gray-700 hover:rounded-full dark:hover:border-gray-200"
+            >
               <IoMdClose />
             </button>
           </div>
@@ -116,7 +122,15 @@ const NotesList = () => {
           />
           <div className={styles.tagsContainer}>
             {note.tags.map((tag) => (
-              <p key={tag} className={styles.tagItem}>
+              <p
+                key={tag}
+                className={classnames(styles.tagItem, {
+                  [styles.selectedTagItem]:
+                    noteInView &&
+                    noteInView !== "new" &&
+                    note.id === noteInView.id,
+                })}
+              >
                 {tag}
               </p>
             ))}

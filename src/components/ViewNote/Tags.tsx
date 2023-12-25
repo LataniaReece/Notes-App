@@ -15,8 +15,9 @@ const styles = {
   tagItem:
     "rounded-lg p-1 font-light text-sm select-none cursor-pointer py-0.5 border border-transparent hover:border-gray-400 hover:text-black",
   selectedTag:
-    "border border-gray-400 text-black bg-gray-100 hover:bg-transparent",
-  unselectedTag: "bg-transparent text-gray-500 border-gray-500",
+    "border border-gray-400 text-black bg-gray-100 hover:bg-transparent dark:bg-gray-700 dark:text-slate-200",
+  unselectedTag:
+    "bg-transparent text-gray-500 border-gray-500 dark:text-slate-200",
   selectTagsContainer: "flex gap-2 ml-30 font-extralight items-center mb-2",
   helper: "text-xs text-gray-400 italic font-extralight",
   buttonsContainer: "flex gap-2",

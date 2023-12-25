@@ -11,7 +11,7 @@ interface PaginationProps {
 
 const styles = {
   wrapper: "flex justify-end gap-3 text-sm p-3",
-  button: "hover:underline hover:text-gray-500",
+  button: "hover:underline hover:text-gray-500 dark:hover:text-gray-400",
   hiddenButton: "hidden",
 };
 

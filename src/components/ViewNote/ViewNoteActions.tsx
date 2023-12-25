@@ -49,7 +49,7 @@ const ViewNoteActions: FC<{ handleSubmit: () => void }> = ({
           Cancel
         </button>
         <button
-          className="rounded-lg border border-gray-600 text-gray-600 px-2 p-2 hover:bg-gray-200"
+          className="rounded-lg border border-gray-600 text-gray-600 px-2 p-2 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-500"
           onClick={handleSubmit}
         >
           {noteInView === "new" ? "Add note" : "Update note"}
@@ -57,7 +57,7 @@ const ViewNoteActions: FC<{ handleSubmit: () => void }> = ({
       </div>
       {noteInView && noteInView !== "new" && (
         <button
-          className="rounded-lg bg-rose-700 border border-rose-700 text-white px-2 p-2 hover:bg-rose-600 hover:border-rose-600"
+          className="rounded-lg bg-rose-700 border border-rose-700 text-white px-2 p-2 hover:bg-rose-600 hover:border-rose-600 dark:bg-rose-900 dark:border-rose-900 dark:hover:bg-rose-700 dark:hover:border-rose-700"
           onClick={handleDeleteNote}
         >
           Delete Note

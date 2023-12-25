@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface EditorProps {
   selectedText: string;
@@ -8,60 +9,69 @@ interface EditorProps {
 }
 
 const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
-  const editorRef = useRef<any>(null);
+  const { theme } = useSelector((state: RootState) => state.notes);
+  const [key, setKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const handleChange = (content: string) => {
     setSelectedText(content);
   };
 
-  const handleEditorInit = (editor: any) => {
-    editorRef.current = editor;
+  const handleEditorInit = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+    setKey((prevKey) => prevKey + 1); // Remount the TinyEditor component
+  }, [theme]);
+
   return (
-    <>
-      <div>
-        {isLoading && <p>Loading editor...</p>}
-        <TinyEditor
-          apiKey={import.meta.env.VITE_TINY_API_KEY}
-          onInit={handleEditorInit}
-          value={selectedText}
-          init={{
-            height: 500,
-            menubar: false,
-            plugins: [
-              "advlist",
-              "autolink",
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "anchor",
-              "searchreplace",
-              "visualblocks",
-              "code",
-              "fullscreen",
-              "insertdatetime",
-              "media",
-              "table",
-              "code",
-              "help",
-              "wordcount",
-            ],
-            toolbar:
-              "undo redo | blocks | " +
-              "bold italic forecolor | alignleft aligncenter " +
-              "alignright alignjustify | bullist numlist outdent indent | " +
-              "removeformat | help",
-            content_style:
-              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-          }}
-          onEditorChange={handleChange}
-        />
-      </div>
-    </>
+    <div
+      key={key}
+      className={`bg-${theme === "dark" ? "gray-800" : "white"} p-4`}
+    >
+      {isLoading && <p>Loading editor...</p>}
+      <TinyEditor
+        key={key}
+        apiKey={import.meta.env.VITE_TINY_API_KEY}
+        onInit={handleEditorInit}
+        value={selectedText}
+        init={{
+          height: 500,
+          menubar: false,
+          skin: theme === "dark" ? "oxide-dark" : "oxide",
+          content_css: theme === "dark" ? "dark" : "",
+          plugins: [
+            "advlist",
+            "autolink",
+            "lists",
+            "link",
+            "image",
+            "charmap",
+            "preview",
+            "anchor",
+            "searchreplace",
+            "visualblocks",
+            "code",
+            "fullscreen",
+            "insertdatetime",
+            "media",
+            "table",
+            "code",
+            "help",
+            "wordcount",
+          ],
+          toolbar:
+            "undo redo | blocks | " +
+            "bold italic forecolor | alignleft aligncenter " +
+            "alignright alignjustify | bullist numlist outdent indent | " +
+            "removeformat | help",
+          content_style:
+            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+        }}
+        onEditorChange={handleChange}
+      />
+    </div>
   );
 };
 

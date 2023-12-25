@@ -8,6 +8,7 @@ interface NotesStateType {
   noteInView: Note | "new" | null;
   currentPage: number;
   itemsPerPage: number;
+  theme: "light" | "dark";
 }
 
 const getInitialState = (): NotesStateType => {
@@ -26,12 +27,17 @@ const getInitialState = (): NotesStateType => {
     sortedNotes = data;
   }
 
+  // Get the theme from localStorage or use "light" as the default
+  const storedTheme = localStorage.getItem("theme");
+  const initialTheme = storedTheme ? JSON.parse(storedTheme) : "light";
+
   const initialState: NotesStateType = {
     noteInView: null,
     notes: sortedNotes,
     isViewingNote: false,
     currentPage: 1,
     itemsPerPage: 5,
+    theme: initialTheme,
   };
 
   return initialState;
@@ -74,6 +80,10 @@ const notesSlice = createSlice({
       state.notes = [];
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
+      localStorage.setItem("theme", JSON.stringify(state.theme));
+    },
   },
 });
 
@@ -85,6 +95,7 @@ export const {
   setIsViewingNote,
   setCurrentPage,
   clearAllNotes,
+  toggleTheme,
 } = notesSlice.actions;
 
 export default notesSlice.reducer;
