@@ -26,10 +26,7 @@ const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
   }, [theme]);
 
   return (
-    <div
-      key={key}
-      className={`bg-${theme === "dark" ? "gray-800" : "white"} p-4`}
-    >
+    <div key={key} className={`bg-${theme === "dark" ? "gray-800" : "white"}`}>
       {isLoading && <p>Loading editor...</p>}
       <TinyEditor
         key={key}

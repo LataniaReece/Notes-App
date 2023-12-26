@@ -1,6 +1,10 @@
 // Pagination.tsx
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import classnames from "classnames";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+
 import { RootState } from "../../store";
 import { setCurrentPage } from "../../slices/notesSlice";
 
@@ -10,9 +14,11 @@ interface PaginationProps {
 }
 
 const styles = {
-  wrapper: "flex justify-end gap-3 text-sm p-3",
+  wrapper: "flex justify-end gap-3 text-sm",
   button: "hover:underline hover:text-gray-500 dark:hover:text-gray-400",
   hiddenButton: "hidden",
+  icons:
+    "text-black hover:text-gray-500 dark:text-white dark:hover:text-gray-500",
 };
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -20,8 +26,8 @@ const Pagination: React.FC<PaginationProps> = ({
   itemsPerPage,
 }) => {
   const dispatch = useDispatch();
-  const currentPage = useSelector(
-    (state: RootState) => state.notes.currentPage
+  const { currentPage, noteInView } = useSelector(
+    (state: RootState) => state.notes
   );
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -31,14 +37,19 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={classnames(styles.wrapper, {
+        "py-3": noteInView,
+        "p-3": !noteInView,
+      })}
+    >
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         className={`${styles.button} ${
           currentPage === 1 ? styles.hiddenButton : ""
         }`}
       >
-        Prev
+        <MdKeyboardArrowLeft size={20} className={styles.icons} />
       </button>
       <span>
         Page {currentPage} of {totalPages}{" "}
@@ -49,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({
           currentPage === totalPages ? styles.hiddenButton : ""
         }`}
       >
-        Next
+        <MdKeyboardArrowRight size={20} className={styles.icons} />
       </button>
     </div>
   );

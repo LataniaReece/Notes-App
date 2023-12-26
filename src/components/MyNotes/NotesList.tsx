@@ -30,7 +30,7 @@ const styles = {
   tagItem:
     "rounded-lg bg-gray-100 dark:bg-gray-600 p-1 font-extralight text-xs",
   selectedTagItem: "bg-gray-100 dark:bg-gray-500",
-  footer: "flex justify-between items-center",
+  footer: "flex justify-between",
   clearButton:
     "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600",
 };
@@ -137,9 +137,13 @@ const NotesList = () => {
           </div>
         </div>
       ))}
-      <div className={styles.footer}>
+      <div
+        className={classnames(styles.footer, {
+          "items-center flex-row": !noteInView,
+        })}
+      >
         <button onClick={handleClearNotes} className={styles.clearButton}>
-          Clear all notes
+          Clear notes
         </button>
         <Pagination totalItems={notes.length} itemsPerPage={itemsPerPage} />
       </div>

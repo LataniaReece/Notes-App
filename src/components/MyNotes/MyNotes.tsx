@@ -4,7 +4,7 @@ import NotesList from "./NotesList";
 import DarkModeToggle from "../DarkModeToggle";
 
 const styles = {
-  heading: "text-4xl mb-7",
+  heading: "text-2xl md:text-3xl lg:text-4xl mb-2 md:mb-7",
 };
 
 const MyNotes: FC = () => {

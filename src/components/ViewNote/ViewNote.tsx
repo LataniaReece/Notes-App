@@ -19,8 +19,8 @@ import { toast } from "react-toastify";
 
 const styles = {
   wrapper: "p-2 h-full",
-  dateWrapper: "flex gap-3 mb-3",
-  dateLabel: "font-extralight",
+  dateWrapper: "flex flex-col md:flex-row md:gap-3 mb-3",
+  dateLabel: "font-medium",
   dateValue: "font-light",
   alert: "mt-3 bg-red-50 border border-red-300 text-red-400 px-4 py-3",
 };

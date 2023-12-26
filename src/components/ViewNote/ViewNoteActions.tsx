@@ -40,16 +40,16 @@ const ViewNoteActions: FC<{ handleSubmit: () => void }> = ({
   };
 
   return (
-    <div className="mt-4 mb-5 flex justify-between">
-      <div>
+    <div className="mt-4 mb-5 flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center">
         <button
-          className="rounded-lg bg-gray-700 text-white px-2 p-2 border border-gray-700 hover:bg-gray-800 mr-3"
+          className="order-2 sm:order-1 rounded-lg bg-gray-700 text-white px-2 p-2 sm:mr-3 border border-gray-700 hover:bg-gray-800"
           onClick={handleCancel}
         >
           Cancel
         </button>
         <button
-          className="rounded-lg border border-gray-600 text-gray-600 px-2 p-2 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-500"
+          className="order-1 sm:order-2 rounded-lg border border-gray-600 text-gray-600 px-2 p-2 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-500"
           onClick={handleSubmit}
         >
           {noteInView === "new" ? "Add note" : "Update note"}

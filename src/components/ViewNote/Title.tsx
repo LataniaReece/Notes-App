@@ -8,7 +8,7 @@ interface TitleProps {
 const styles = {
   wrapper: "mt-3",
   input:
-    "text-4xl w-full mb-3 focus:outline-none dark:bg-slate-900 dark:text-slate-200",
+    "text-2xl md:text-3xl lg:text-4xl w-full mb-3 focus:outline-none dark:bg-slate-900 dark:text-slate-200",
 };
 
 const Title: FC<TitleProps> = ({
