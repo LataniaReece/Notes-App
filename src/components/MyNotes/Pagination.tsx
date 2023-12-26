@@ -15,10 +15,11 @@ interface PaginationProps {
 
 const styles = {
   wrapper: "flex justify-end gap-3 text-sm",
-  button: "hover:underline hover:text-gray-500 dark:hover:text-gray-400",
+  button:
+    "lg:hover:underline lg:hover:text-gray-500 lg:dark:hover:text-gray-400",
   hiddenButton: "hidden",
   icons:
-    "text-black hover:text-gray-500 dark:text-white dark:hover:text-gray-500",
+    "text-black lg:hover:text-gray-500 dark:text-white lg:dark:hover:text-gray-500",
 };
 
 const Pagination: React.FC<PaginationProps> = ({

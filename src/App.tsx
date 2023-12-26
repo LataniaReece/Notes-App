@@ -10,7 +10,7 @@ import CustomToastContainer from "./components/CustomToastContainer";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
-  const { isViewingNote, theme } = useSelector(
+  const { isViewingNote, theme, currentPage } = useSelector(
     (state: RootState) => state.notes
   );
 
@@ -27,6 +27,10 @@ const App = () => {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   return (
     <ErrorBoundary>

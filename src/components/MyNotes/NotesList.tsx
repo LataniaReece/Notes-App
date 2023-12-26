@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import classnames from "classnames";
@@ -15,11 +15,13 @@ import {
   setIsViewingNote,
   setNoteInView,
 } from "../../slices/notesSlice";
+import { useState } from "react";
+import CustomModal from "../CustomModal";
 
 const styles = {
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
   unSelectedNoteItem:
-    "bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600",
+    "bg-gray-50 lg:hover:bg-gray-100 dark:bg-gray-700 lg:dark:hover:bg-gray-600",
   selectedNoteItem: "bg-gray-100 dark:bg-gray-600",
   date: "uppercase text-xs text-gray-400 font-extralight dark:text-slate-400",
   title: "text-gray-500 dark:text-gray-100",
@@ -32,10 +34,18 @@ const styles = {
   selectedTagItem: "bg-gray-100 dark:bg-gray-500",
   footer: "flex justify-between",
   clearButton:
-    "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600",
+    "rounded-lg bg-gray-700 text-white text-sm px-2 p-2 border border-gray-700 lg:hover:bg-gray-800 lg:dark:hover:bg-gray-600",
 };
 
 const NotesList = () => {
+  const [showDeleteNoteConfirmation, setShowDeleteNoteConfirmation] =
+    useState(false);
+  const [showClearNotesConfirmation, setShowClearNotesConfirmation] =
+    useState(false);
+  const [selectedNoteToDelete, setSelectedNoteToDelete] = useState<Note | null>(
+    null
+  );
+
   const { notes, noteInView, currentPage, itemsPerPage } = useSelector(
     (state: RootState) => state.notes
   );
@@ -57,26 +67,30 @@ const NotesList = () => {
     }
   };
 
-  const handleClearNotes = () => {
-    if (window.confirm("Are you sure you want to clear all notes?")) {
-      dispatch(clearAllNotes());
-      toast.success("Notes cleared!");
-    }
-  };
-
   const handleDeleteNote = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     note: Note
   ) => {
     e.stopPropagation();
-    if (window.confirm(`Are you sure you want to delete "${note.title}"`)) {
-      if (note && note.id) {
-        dispatch(deleteNote(note.id));
-        toast.success(`Note deleted!`);
-      } else {
-        toast.error(`Error. Please try again.`);
-      }
+    setSelectedNoteToDelete(note);
+    setShowDeleteNoteConfirmation(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedNoteToDelete && selectedNoteToDelete.id) {
+      dispatch(deleteNote(selectedNoteToDelete.id));
+      setSelectedNoteToDelete(null);
+      setShowDeleteNoteConfirmation(false);
+      toast.success(`Note deleted!`);
+    } else {
+      toast.error(`Error. Please try again.`);
     }
+  };
+
+  const confirmClearNotes = () => {
+    dispatch(clearAllNotes());
+    setShowClearNotesConfirmation(false);
+    toast.success(`Notes cleared!`);
   };
 
   return (
@@ -95,12 +109,14 @@ const NotesList = () => {
           onClick={() => handleViewNote(note)}
         >
           <div className="flex justify-between">
-            <p className={styles.date}>
-              {format(new Date(note.updated_at), "MM/dd/yy h:mm a")}
-            </p>
+            {note.updated_at && isValid(note.updated_at) && (
+              <p className={styles.date}>
+                {format(new Date(note.updated_at), "MM/dd/yy h:mm a")}
+              </p>
+            )}
             <button
               onClick={(e) => handleDeleteNote(e, note)}
-              className="border border-transparent hover:gray hover:border-gray-700 hover:rounded-full dark:hover:border-gray-200"
+              className="border border-transparent lg:hover:gray lg:hover:border-gray-700 lg:hover:rounded-full lg:dark:hover:border-gray-200"
             >
               <IoMdClose />
             </button>
@@ -142,11 +158,30 @@ const NotesList = () => {
           "items-center flex-row": !noteInView,
         })}
       >
-        <button onClick={handleClearNotes} className={styles.clearButton}>
+        <button
+          onClick={() => setShowClearNotesConfirmation(true)}
+          className={styles.clearButton}
+        >
           Clear notes
         </button>
         <Pagination totalItems={notes.length} itemsPerPage={itemsPerPage} />
       </div>
+      <CustomModal
+        isOpen={showDeleteNoteConfirmation}
+        setIsOpen={setShowDeleteNoteConfirmation}
+        handleConfirm={confirmDelete}
+        label="Delete Confirmation"
+        text={`Are you sure you want to delete ${
+          selectedNoteToDelete ? selectedNoteToDelete.title : ""
+        }?`}
+      />
+      <CustomModal
+        isOpen={showClearNotesConfirmation}
+        setIsOpen={setShowClearNotesConfirmation}
+        handleConfirm={confirmClearNotes}
+        label="Clear Notes Confirmation"
+        text={"Are you sure you want to clear all notes?"}
+      />
     </>
   );
 };

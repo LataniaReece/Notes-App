@@ -12,11 +12,11 @@ const DarkModeToggle: FC = () => {
     <div
       className={`relative flex items-center cursor-pointer w-12 h-6 ${
         isDarkMode ? "bg-gray-600" : "bg-gray-100"
-      } rounded-full p-1 transition-colors hover:shadow-md dark:hover:shadow-gray-800`}
+      } rounded-full p-1 transition-colors`}
       onClick={() => dispatch(toggleTheme())}
     >
       <div
-        className={`w-5 h-5 rounded-full shadow-md transform ${
+        className={`w-5 h-5 rounded-full transform ${
           isDarkMode ? "translate-x-full" : "translate-x-0"
         } transition-transform`}
       >

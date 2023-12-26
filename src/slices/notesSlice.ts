@@ -51,11 +51,13 @@ const notesSlice = createSlice({
   reducers: {
     addNote: (state, action: PayloadAction<Note>) => {
       state.notes = [action.payload, ...state.notes];
+      state.currentPage = 1;
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     deleteNote: (state, action: PayloadAction<string>) => {
       const noteIdToRemove = action.payload;
       state.notes = state.notes.filter((note) => note.id !== noteIdToRemove);
+      state.currentPage = 1;
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     updateNote: (state, action: PayloadAction<Note>) => {
@@ -65,6 +67,7 @@ const notesSlice = createSlice({
         ...state.notes.filter((note) => note.id !== updatedNote.id),
       ];
       state.notes = updatedNotes;
+      state.currentPage = 1;
       localStorage.setItem("notes", JSON.stringify(updatedNotes));
     },
     setNoteInView: (state, action: PayloadAction<Note | "new" | null>) => {

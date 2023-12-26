@@ -21,7 +21,7 @@ const EmptyNotesDisplay: FC = () => {
         <a
           href="#"
           onClick={(e) => handleAddNewNote(e)}
-          className="underline hover:no-underline"
+          className="underline lg:hover:no-underline"
         >
           Add a new note
         </a>{" "}

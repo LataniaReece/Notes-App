@@ -10,12 +10,12 @@ interface TagsProps {
 
 const styles = {
   tagsWrapper: "mt-2 mb-4",
-  heading: "font-extralight underline hover:no-underline",
+  heading: "font-extralight underline lg:hover:no-underline",
   tagsContainer: "flex gap-2",
   tagItem:
-    "rounded-lg p-1 font-light text-sm select-none cursor-pointer py-0.5 border border-transparent w-fit whitespace-nowrap md:w-full hover:border-gray-400 hover:text-black ",
+    "rounded-lg p-1 mb-2 md:mb-0 font-light text-sm select-none cursor-pointer py-0.5 border border-transparent w-fit whitespace-nowrap md:w-full hover:border-gray-400 hover:text-black ",
   selectedTag:
-    "border border-gray-400 text-black bg-gray-100 hover:bg-transparent dark:bg-gray-700 dark:text-slate-200",
+    "border border-gray-400 text-black bg-gray-100 lg:hover:bg-transparent dark:bg-gray-700 dark:text-slate-200",
   unselectedTag:
     "bg-transparent text-gray-500 border-gray-500 dark:text-slate-200",
   selectTagsContainer:

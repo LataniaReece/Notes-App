@@ -5,7 +5,7 @@ import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 const styles = {
   wrapper: "flex gap-2 font-light pt-2 pb-5 border-b border-gray-100 ",
   button:
-    "hover:underline hover:text-gray-500 transition duration-100 dark:hover:text-gray-400",
+    "lg:hover:underline lg:hover:text-gray-500 transition duration-100 lg:dark:hover:text-gray-400",
 };
 
 const Breadcrumb = () => {

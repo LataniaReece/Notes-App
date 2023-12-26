@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { v4 as uuid4 } from "uuid";
 
 import Breadcrumb from "./Breadcrumb";
@@ -54,7 +54,7 @@ const ViewNote = () => {
       return;
     }
 
-    const formattedNow = format(new Date(), "MM-dd-yyyy HH:mm:ss");
+    const timestampNow = Date.now();
 
     // If new note in view add note
     if (noteInView === "new") {
@@ -64,8 +64,8 @@ const ViewNote = () => {
           title: selectedTitle,
           tags: selectedTags,
           text: selectedText,
-          updated_at: formattedNow,
-          created_at: formattedNow,
+          updated_at: timestampNow,
+          created_at: timestampNow,
         })
       );
       toast.success("New note added!");
@@ -77,7 +77,7 @@ const ViewNote = () => {
           title: selectedTitle,
           tags: selectedTags,
           text: selectedText,
-          updated_at: formattedNow,
+          updated_at: timestampNow,
         })
       );
       toast.success("Note updated!");
@@ -109,15 +109,19 @@ const ViewNote = () => {
         setSelectedTitle={setSelectedTitle}
         autoFocus={noteInView === "new"}
       />
-      {noteInView && noteInView !== "new" && noteInView.updated_at && (
-        <div className={styles.dateWrapper}>
-          <p className={styles.dateLabel}>Last Modified:</p>
-          <p className={styles.dateValue}>
-            {noteInView &&
-              format(new Date(noteInView.updated_at), "MMMM dd, yyyy h:mm a")}
-          </p>
-        </div>
-      )}
+      {noteInView &&
+        noteInView !== "new" &&
+        noteInView.updated_at &&
+        isValid(noteInView.updated_at) && (
+          <div className={styles.dateWrapper}>
+            <p className={styles.dateLabel}>Last Modified:</p>
+            <p className={styles.dateValue}>
+              {noteInView &&
+                isValid(noteInView.updated_at) &&
+                format(new Date(noteInView.updated_at), "MMMM dd, yyyy h:mm a")}
+            </p>
+          </div>
+        )}
       <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       <Editor selectedText={selectedText} setSelectedText={setSelectedText} />
       {message && <p className={styles.alert}>{message}</p>}

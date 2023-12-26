@@ -7,6 +7,11 @@ const contextClass = {
   error: "bg-rose-700",
 };
 
+const styles = {
+  toastContainer:
+    "relative flex p-1 min-h-10 rounded-md justify-between items-center overflow-hidden cursor-pointer",
+};
+
 // Styling Docs: https://fkhadra.github.io/react-toastify/how-to-style
 const CustomToastContainer: FC = () => {
   return (
@@ -22,8 +27,7 @@ const CustomToastContainer: FC = () => {
       pauseOnHover
       theme="colored"
       toastClassName={({ type }) =>
-        contextClass[type || "default"] +
-        " relative flex p-1 min-h-10 rounded-md justify-between items-center overflow-hidden cursor-pointer"
+        contextClass[type || "default"] + " " + styles.toastContainer
       }
       closeButton={({ closeToast }) => (
         <button className="text-white" onClick={closeToast}>
