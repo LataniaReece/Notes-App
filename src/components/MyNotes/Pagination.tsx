@@ -1,12 +1,11 @@
 // Pagination.tsx
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-import { RootState } from "../../store";
 import { setCurrentPage } from "../../slices/notesSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 interface PaginationProps {
   totalItems: number;
@@ -26,10 +25,8 @@ const Pagination: React.FC<PaginationProps> = ({
   totalItems,
   itemsPerPage,
 }) => {
-  const dispatch = useDispatch();
-  const { currentPage, noteInView } = useSelector(
-    (state: RootState) => state.notes
-  );
+  const dispatch = useAppDispatch();
+  const { currentPage, noteInView } = useAppSelector((state) => state.notes);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 

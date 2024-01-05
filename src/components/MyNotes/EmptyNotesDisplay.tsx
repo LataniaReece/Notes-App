@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { useDispatch } from "react-redux";
 import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
 import { IoAlertCircle } from "react-icons/io5";
+import { useAppDispatch } from "../../hooks";
 
 const EmptyNotesDisplay: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleAddNewNote = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>

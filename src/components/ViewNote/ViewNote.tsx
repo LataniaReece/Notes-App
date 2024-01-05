@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { format, isValid } from "date-fns";
 import { v4 as uuid4 } from "uuid";
+import { toast } from "react-toastify";
 
 import Breadcrumb from "./Breadcrumb";
 import Editor from "./Editor";
 import Tags from "./Tags";
 import Title from "./Title";
 import ViewNoteActions from "./ViewNoteActions";
-import { RootState } from "../../store";
 import {
   addNote,
   setIsViewingNote,
   setNoteInView,
   updateNote,
 } from "../../slices/notesSlice";
-import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 const styles = {
   wrapper: "p-2 h-full",
@@ -26,7 +25,7 @@ const styles = {
 };
 
 const ViewNote = () => {
-  const { noteInView } = useSelector((state: RootState) => state.notes);
+  const { noteInView } = useAppSelector((state) => state.notes);
 
   const [selectedTags, setSelectedTags] = useState<string[]>(
     (noteInView && noteInView !== "new" && noteInView.tags) || []
@@ -39,7 +38,7 @@ const ViewNote = () => {
   );
   const [message, setMessage] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSubmitNote = () => {
     setMessage("");

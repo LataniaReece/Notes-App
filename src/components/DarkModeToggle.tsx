@@ -1,12 +1,11 @@
 import { FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { RiSunLine, RiMoonLine } from "react-icons/ri";
-import { RootState } from "../store";
 import { toggleTheme } from "../slices/notesSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
 
 const DarkModeToggle: FC = () => {
-  const { theme } = useSelector((state: RootState) => state.notes);
-  const dispatch = useDispatch();
+  const { theme } = useAppSelector((state) => state.notes);
+  const dispatch = useAppDispatch();
   const isDarkMode = theme === "dark";
   return (
     <div

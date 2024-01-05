@@ -1,6 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store";
 import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 const styles = {
   wrapper: "flex gap-2 font-light pt-2 pb-5 border-b border-gray-100 ",
@@ -9,8 +8,8 @@ const styles = {
 };
 
 const Breadcrumb = () => {
-  const { noteInView } = useSelector((state: RootState) => state.notes);
-  const dispatch = useDispatch();
+  const { noteInView } = useAppSelector((state) => state.notes);
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     dispatch(setNoteInView(null));

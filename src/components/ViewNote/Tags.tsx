@@ -1,7 +1,6 @@
 import { FC } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import classnames from "classnames";
+import { useAppSelector } from "../../hooks";
 
 interface TagsProps {
   selectedTags: string[];
@@ -25,7 +24,7 @@ const styles = {
 };
 
 const Tags: FC<TagsProps> = ({ selectedTags, setSelectedTags }) => {
-  const { noteInView } = useSelector((state: RootState) => state.notes);
+  const { noteInView } = useAppSelector((state) => state.notes);
 
   if (!noteInView) {
     return null;

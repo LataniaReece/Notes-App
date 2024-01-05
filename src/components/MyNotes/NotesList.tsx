@@ -1,6 +1,4 @@
 import { format, isValid } from "date-fns";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import classnames from "classnames";
 import DOMPurify from "dompurify";
 import { IoMdClose } from "react-icons/io";
@@ -17,6 +15,7 @@ import {
 } from "../../slices/notesSlice";
 import { useState } from "react";
 import CustomModal from "../CustomModal";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 const styles = {
   noteItem: "rounded-lg mb-3 p-3 cursor-pointer border border-transparent",
@@ -46,10 +45,10 @@ const NotesList = () => {
     null
   );
 
-  const { notes, noteInView, currentPage, itemsPerPage } = useSelector(
-    (state: RootState) => state.notes
+  const { notes, noteInView, currentPage, itemsPerPage } = useAppSelector(
+    (state) => state.notes
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   if (!notes || notes.length === 0) {
     return <EmptyNotesDisplay />;

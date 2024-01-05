@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
 import { setIsViewingNote, setNoteInView } from "../../slices/notesSlice";
+import { useAppDispatch } from "../../hooks";
 
 const styles = {
   button:
@@ -7,7 +7,7 @@ const styles = {
 };
 
 const AddNote = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     dispatch(setNoteInView("new"));

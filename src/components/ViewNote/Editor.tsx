@@ -1,7 +1,6 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Editor as TinyEditor } from "@tinymce/tinymce-react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../hooks";
 
 interface EditorProps {
   selectedText: string;
@@ -9,7 +8,7 @@ interface EditorProps {
 }
 
 const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
-  const { theme } = useSelector((state: RootState) => state.notes);
+  const { theme } = useAppSelector((state) => state.notes);
   const [key, setKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const handleChange = (content: string) => {

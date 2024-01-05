@@ -1,13 +1,12 @@
 import { FC, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNote,
   setIsViewingNote,
   setNoteInView,
 } from "../../slices/notesSlice";
-import { RootState } from "../../store";
 import { toast } from "react-toastify";
 import CustomModal from "../CustomModal";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 const styles = {
   wrapper:
@@ -26,8 +25,8 @@ const ViewNoteActions: FC<{ handleSubmit: () => void }> = ({
 }) => {
   const [showDeleteNoteConfirmation, setShowDeleteNoteConfirmation] =
     useState(false);
-  const { noteInView } = useSelector((state: RootState) => state.notes);
-  const dispatch = useDispatch();
+  const { noteInView } = useAppSelector((state) => state.notes);
+  const dispatch = useAppDispatch();
 
   const handleCancel = () => {
     dispatch(setNoteInView(null));

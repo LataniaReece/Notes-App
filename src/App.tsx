@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "./store";
 import classnames from "classnames";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,10 +6,11 @@ import MyNotes from "./components/MyNotes/MyNotes";
 import ViewNote from "./components/ViewNote/ViewNote";
 import CustomToastContainer from "./components/CustomToastContainer";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { useAppSelector } from "./hooks";
 
 const App = () => {
-  const { isViewingNote, theme, currentPage } = useSelector(
-    (state: RootState) => state.notes
+  const { isViewingNote, theme, currentPage } = useAppSelector(
+    (state) => state.notes
   );
 
   const styles = {
