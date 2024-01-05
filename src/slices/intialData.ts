@@ -1,5 +1,3 @@
-import { Note } from "./notesTypes";
-
 export const data: Note[] = [
   {
     id: "123-abc",

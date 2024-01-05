@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 
 import Pagination from "./Pagination";
 import EmptyNotesDisplay from "./EmptyNotesDisplay";
-import { Note } from "../../slices/notesTypes";
 import {
   clearAllNotes,
   deleteNote,
@@ -136,7 +135,7 @@ const NotesList = () => {
             dangerouslySetInnerHTML={sanitizeAndRenderHTML(note.text)}
           />
           <div className={styles.tagsContainer}>
-            {note.tags.map((tag) => (
+            {note.tags.map((tag: string) => (
               <p
                 key={tag}
                 className={classnames(styles.tagItem, {
