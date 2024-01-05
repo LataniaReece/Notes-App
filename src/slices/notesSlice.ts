@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, nanoid } from "@reduxjs/toolkit";
 import { data } from "./intialData";
 
 interface NotesStateType {
@@ -44,23 +44,36 @@ const getInitialState = (): NotesStateType => {
 
 const initialState: NotesStateType = getInitialState();
 
+type DraftNote = RequireOnly<Note, "title" | "tags" | "text">;
+
+export const createNote = (draftNote: DraftNote): Note => {
+  const timestampNow = Date.now();
+  return {
+    id: nanoid(),
+    updated_at: timestampNow,
+    created_at: timestampNow,
+    ...draftNote,
+  };
+};
+
 const notesSlice = createSlice({
   name: "notes",
   initialState,
   reducers: {
-    addNote: (state, action: PayloadAction<Note>) => {
-      state.notes = [action.payload, ...state.notes];
+    addNote: (state, action: PayloadAction<DraftNote>) => {
+      const note = createNote(action.payload);
+      state.notes = [note, ...state.notes];
       state.currentPage = 1;
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
-    deleteNote: (state, action: PayloadAction<string>) => {
+    deleteNote: (state, action: PayloadAction<Note["id"]>) => {
       const noteIdToRemove = action.payload;
       state.notes = state.notes.filter((note) => note.id !== noteIdToRemove);
       state.currentPage = 1;
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     updateNote: (state, action: PayloadAction<Note>) => {
-      const updatedNote = action.payload;
+      const updatedNote = { ...action.payload, updated_at: Date.now() };
       const updatedNotes = [
         updatedNote,
         ...state.notes.filter((note) => note.id !== updatedNote.id),

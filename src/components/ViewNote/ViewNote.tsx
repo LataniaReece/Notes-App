@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { format, isValid } from "date-fns";
-import { v4 as uuid4 } from "uuid";
 import { toast } from "react-toastify";
 
 import Breadcrumb from "./Breadcrumb";
@@ -27,13 +26,13 @@ const styles = {
 const ViewNote = () => {
   const { noteInView } = useAppSelector((state) => state.notes);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>(
+  const [selectedTags, setSelectedTags] = useState<Note["tags"]>(
     (noteInView && noteInView !== "new" && noteInView.tags) || []
   );
-  const [selectedTitle, setSelectedTitle] = useState<string>(
+  const [selectedTitle, setSelectedTitle] = useState<Note["title"]>(
     (noteInView && noteInView !== "new" && noteInView.title) || ""
   );
-  const [selectedText, setSelectedText] = useState<string>(
+  const [selectedText, setSelectedText] = useState<Note["text"]>(
     (noteInView && noteInView !== "new" && noteInView.text) || ""
   );
   const [message, setMessage] = useState("");
@@ -53,18 +52,13 @@ const ViewNote = () => {
       return;
     }
 
-    const timestampNow = Date.now();
-
     // If new note in view add note
     if (noteInView === "new") {
       dispatch(
         addNote({
-          id: uuid4(),
           title: selectedTitle,
           tags: selectedTags,
           text: selectedText,
-          updated_at: timestampNow,
-          created_at: timestampNow,
         })
       );
       toast.success("New note added!");
@@ -76,7 +70,6 @@ const ViewNote = () => {
           title: selectedTitle,
           tags: selectedTags,
           text: selectedText,
-          updated_at: timestampNow,
         })
       );
       toast.success("Note updated!");

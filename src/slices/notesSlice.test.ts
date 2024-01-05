@@ -1,6 +1,9 @@
+import { vi } from "vitest";
+import { data } from "./intialData";
 import notesReducer, {
   addNote,
   clearAllNotes,
+  createNote,
   deleteNote,
   setCurrentPage,
   setIsViewingNote,
@@ -8,7 +11,6 @@ import notesReducer, {
   toggleTheme,
   updateNote,
 } from "./notesSlice";
-import { data } from "./intialData";
 
 describe("Notes Reducer", () => {
   const initialState = {
@@ -29,14 +31,11 @@ describe("Notes Reducer", () => {
   });
 
   it("supports adding a note with correct details", () => {
-    const testNote = {
-      id: "test",
+    const testNote = createNote({
       title: "Test Note",
       text: "This is a test note",
       tags: ["Personal", "To-do"],
-      created_at: 1641048937090,
-      updated_at: 1641057045090,
-    };
+    });
     expect(notesReducer(undefined, addNote(testNote))).toEqual({
       ...initialState,
       notes: expect.arrayContaining([testNote]),
@@ -44,14 +43,11 @@ describe("Notes Reducer", () => {
   });
 
   it("supports deleting a note", () => {
-    const testNote = {
-      id: "test",
+    const testNote = createNote({
       title: "Test Note",
       text: "This is a test note",
       tags: ["Personal", "To-do"],
-      created_at: 1641048937090,
-      updated_at: 1641057045090,
-    };
+    });
     const stateAfterAdd = notesReducer(undefined, addNote(testNote));
     expect(stateAfterAdd).toEqual({
       ...initialState,
@@ -64,20 +60,13 @@ describe("Notes Reducer", () => {
     });
   });
 
-  it("updating a note with correct details", () => {
-    const testNote = {
-      id: "test",
+  it("updating a note with correct details", async () => {
+    const testNote = createNote({
       title: "Test Note",
       text: "This is a test note",
       tags: ["Personal", "To-do"],
-      created_at: 1641048937090,
-      updated_at: 1641057045090,
-    };
-    const updatedNote = {
-      ...testNote,
-      title: "Updated note",
-      updated_at: 1641057045099,
-    };
+    });
+
     // Add the testNote
     const stateAfterAdd = notesReducer(undefined, addNote(testNote));
     expect(stateAfterAdd).toEqual({
@@ -85,32 +74,43 @@ describe("Notes Reducer", () => {
       notes: expect.arrayContaining([testNote]),
     });
 
+    // Speed time up so that when we update, updated_at is different than created_at as we expect in real world
+    vi.useFakeTimers();
+    vi.advanceTimersByTime(20000);
+
     // Update the note and check the state
+    const updatedNoteTitle = "Updated Test Note!";
     const stateAfterUpdate = notesReducer(
       stateAfterAdd,
-      updateNote(updatedNote)
+      updateNote({ ...testNote, title: updatedNoteTitle })
+    );
+
+    const updatedNote = stateAfterUpdate.notes.find(
+      (note) => note.title === updatedNoteTitle
     );
     expect(stateAfterUpdate).toEqual({
       ...initialState,
       notes: expect.arrayContaining([updatedNote]),
     });
-
-    // Check that testNote is not present in the state
+    // Check that original testNote is not present in the state
     expect(stateAfterUpdate).toEqual({
       ...initialState,
       notes: expect.not.arrayContaining([testNote]),
     });
+    // Make sure updated_at was updated
+    if (updatedNote) {
+      expect(updatedNote.updated_at).not.toEqual(testNote.updated_at);
+    } else {
+      throw new Error("Updated note is undefined");
+    }
   });
 
   it("supports clearing all notes", () => {
-    const testNote = {
-      id: "test",
+    const testNote = createNote({
       title: "Test Note",
       text: "This is a test note",
       tags: ["Personal", "To-do"],
-      created_at: 1641048937090,
-      updated_at: 1641057045090,
-    };
+    });
 
     // Check clearAll with no added notes
     expect(notesReducer(undefined, clearAllNotes())).toEqual({
@@ -131,14 +131,11 @@ describe("Notes Reducer", () => {
   });
 
   it("should set noteInView correctly", () => {
-    const testNote = {
-      id: "test",
+    const testNote = createNote({
       title: "Test Note",
       text: "This is a test note",
       tags: ["Personal", "To-do"],
-      created_at: 1641048937090,
-      updated_at: 1641057045090,
-    };
+    });
 
     expect(notesReducer(undefined, setNoteInView("new"))).toEqual({
       ...initialState,

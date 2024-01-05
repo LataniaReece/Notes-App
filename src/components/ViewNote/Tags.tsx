@@ -3,8 +3,8 @@ import classnames from "classnames";
 import { useAppSelector } from "../../hooks";
 
 interface TagsProps {
-  selectedTags: string[];
-  setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedTags: Note["tags"];
+  setSelectedTags: React.Dispatch<React.SetStateAction<Note["tags"]>>;
 }
 
 const styles = {
@@ -30,7 +30,7 @@ const Tags: FC<TagsProps> = ({ selectedTags, setSelectedTags }) => {
     return null;
   }
 
-  const availableTags = [
+  const availableTags: Note["tags"] = [
     "Personal",
     "Work",
     "Study",
@@ -39,7 +39,9 @@ const Tags: FC<TagsProps> = ({ selectedTags, setSelectedTags }) => {
     "Journal",
   ];
 
-  const handleTagSelection = (tag: string) => {
+  const handleTagSelection = (
+    tag: "Personal" | "Work" | "Study" | "Important" | "To-do" | "Journal"
+  ) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
     } else {
