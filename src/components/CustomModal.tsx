@@ -49,8 +49,12 @@ const CustomModal: FC<CustomModalProps> = ({
       overlayClassName={styles.overlay}
       className={styles.content}
     >
-      <p className={styles.label}>{label}</p>
-      <p className={styles.text}>{text}</p>
+      <p className={styles.label} data-testid="modal-label">
+        {label}
+      </p>
+      <p className={styles.text} data-testid="modal-text">
+        {text}
+      </p>
       <div className={styles.buttonContainer}>
         <button onClick={handleConfirm} className={styles.confirmButton}>
           Yes
