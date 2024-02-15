@@ -6,8 +6,8 @@ https://latania-notesapp.netlify.app
 
 - **Tailwind CSS**: Embraced Tailwind CSS for its utility-first approach to styling. This exploration allowed me to customize the app's design with more granularity and control compared to using traditional CSS frameworks like Material-UI or Bootstrap. Tailwind's responsive design features were instrumental in achieving a mobile-friendly interface that adapts elegantly across devices.
 - **classnames Package**: Utilized the `classnames` package to dynamically manage CSS classes, especially for toggling between light and dark themes. This approach streamlined the implementation of theme switching, enhancing the app's responsiveness. 
-
 - **Playwright for Testing**: Ventured into using Playwright as the testing framework. Playwright stood out for its ability to record user interactions and automatically generate tests, a feature that significantly accelerated the testing process. The exploration into Playwright revealed its advantages over other testing frameworks like Cypress, including more comprehensive browser support and improved testing capabilities for modern web applications.
+- **Redux Toolkit**: Used Redux Toolkit for state management to take advantage of its simplified store setup, built-in middleware, and utilities for reducing boilerplate code in Redux logic. This choice significantly enhanced state management practices within the app, making state updates more predictable and the codebase cleaner and more maintainable.
 
 ## Key Features
 
@@ -22,7 +22,7 @@ Building the Notes App was an insightful journey. Tailwind CSS provided a fresh 
 
 The exploration of the `classnames` package for theme management was a testament to the power of dynamic class binding in React, simplifying the implementation of multi-theme support.
 
-Finally, adopting Playwright for testing opened up new avenues for ensuring app reliability and performance, setting a new standard for my future projects.
+Using Redux Toolkit for state management streamlined my approach to managing app state, making the code more concise and easier to understand. Finally, adopting Playwright for testing opened up new avenues for ensuring app reliability and performance, setting a new standard for my future projects.
 
 ## Getting Started
 
