@@ -5,6 +5,7 @@ import { IoMdClose } from "react-icons/io";
 const contextClass = {
   success: "bg-emerald-600",
   error: "bg-rose-700",
+  default: "bg-gray-600",
 };
 
 const styles = {
@@ -26,9 +27,13 @@ const CustomToastContainer: FC = () => {
       draggable
       pauseOnHover
       theme="colored"
-      toastClassName={({ type }) =>
-        contextClass[type || "default"] + " " + styles.toastContainer
-      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      toastClassName={({ type }: any) => {
+        const className =
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (contextClass as any)[type || "default"] || contextClass["default"];
+        return `${className} ${styles.toastContainer}`;
+      }}
       closeButton={({ closeToast }) => (
         <button className="text-white" onClick={closeToast}>
           <IoMdClose />

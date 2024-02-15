@@ -62,7 +62,6 @@ describe("NotesList Component", () => {
       },
     };
     const { store } = render(<NotesList />, { initialState });
-    screen.debug();
     const notesList = screen.getByTestId("notes-list");
     expect(notesList).toBeInTheDocument();
     expect(notesList).toHaveTextContent(note.title);

@@ -100,7 +100,6 @@ describe("ViewNote Component", () => {
 
     await userEvent.click(submitButton);
 
-    screen.debug();
     expect(toast.success).toHaveBeenCalledWith("New note added!");
   });
 
