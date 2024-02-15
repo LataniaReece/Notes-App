@@ -8,11 +8,13 @@ const DarkModeToggle: FC = () => {
   const dispatch = useAppDispatch();
   const isDarkMode = theme === "dark";
   return (
-    <div
+    <button
+      type="button"
       className={`relative flex items-center cursor-pointer w-12 h-6 ${
         isDarkMode ? "bg-gray-600" : "bg-gray-100"
       } rounded-full p-1 transition-colors`}
       onClick={() => dispatch(toggleTheme())}
+      data-testid="toggle-theme-button"
     >
       <div
         className={`w-5 h-5 rounded-full transform ${
@@ -21,7 +23,7 @@ const DarkModeToggle: FC = () => {
       >
         {isDarkMode ? <RiMoonLine size={20} /> : <RiSunLine size={20} />}
       </div>
-    </div>
+    </button>
   );
 };
 

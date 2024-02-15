@@ -18,7 +18,11 @@ const Breadcrumb = () => {
   return (
     noteInView && (
       <div className={styles.wrapper}>
-        <button className={styles.button} onClick={handleClick}>
+        <button
+          className={styles.button}
+          onClick={handleClick}
+          data-testid="view-notes-button"
+        >
           My Notes
         </button>
         <p>{`>`}</p>
