@@ -56,7 +56,11 @@ const CustomModal: FC<CustomModalProps> = ({
         {text}
       </p>
       <div className={styles.buttonContainer}>
-        <button onClick={handleConfirm} className={styles.confirmButton}>
+        <button
+          onClick={handleConfirm}
+          className={styles.confirmButton}
+          data-testid="confirm-button"
+        >
           Yes
         </button>
         <button

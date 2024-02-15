@@ -60,7 +60,11 @@ const ViewNoteActions: FC<{ handleSubmit: () => void }> = ({
           <button className={styles.cancelBtn} onClick={handleCancel}>
             Cancel
           </button>
-          <button className={styles.saveBtn} onClick={handleSubmit}>
+          <button
+            className={styles.saveBtn}
+            onClick={handleSubmit}
+            data-testid="note-submit"
+          >
             {noteInView === "new" ? "Add note" : "Update note"}
           </button>
         </div>

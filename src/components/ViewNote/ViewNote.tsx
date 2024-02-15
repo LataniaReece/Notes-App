@@ -23,21 +23,36 @@ const styles = {
   alert: "mt-3 bg-red-50 border border-red-300 text-red-400 px-4 py-3",
 };
 
+interface NoteState {
+  tags: ("Personal" | "Work" | "Study" | "Important" | "To-do" | "Journal")[];
+  title: string;
+  text: string;
+}
+
 const ViewNote = () => {
   const { noteInView } = useAppSelector((state) => state.notes);
 
-  const [selectedTags, setSelectedTags] = useState<Note["tags"]>(
-    (noteInView && noteInView !== "new" && noteInView.tags) || []
-  );
-  const [selectedTitle, setSelectedTitle] = useState<Note["title"]>(
-    (noteInView && noteInView !== "new" && noteInView.title) || ""
-  );
-  const [selectedText, setSelectedText] = useState<Note["text"]>(
-    (noteInView && noteInView !== "new" && noteInView.text) || ""
-  );
+  const [note, setNote] = useState<NoteState>({
+    tags: [],
+    title: "",
+    text: "",
+  });
+
   const [message, setMessage] = useState("");
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (noteInView && noteInView !== "new") {
+      setNote({
+        tags: noteInView.tags || [],
+        title: noteInView.title || "",
+        text: noteInView.text || "",
+      });
+    } else {
+      setNote({ tags: [], title: "", text: "" });
+    }
+  }, [noteInView]);
 
   const handleSubmitNote = () => {
     setMessage("");
@@ -47,31 +62,17 @@ const ViewNote = () => {
       return;
     }
 
-    if (!selectedTitle || !selectedTags || !selectedText) {
+    const { tags, title, text } = note;
+    if (!title || !tags.length || !text) {
       setMessage("Please enter all fields");
       return;
     }
 
-    // If new note in view add note
     if (noteInView === "new") {
-      dispatch(
-        addNote({
-          title: selectedTitle,
-          tags: selectedTags,
-          text: selectedText,
-        })
-      );
+      dispatch(addNote({ ...note }));
       toast.success("New note added!");
     } else {
-      // Note is not new so update note
-      dispatch(
-        updateNote({
-          ...noteInView,
-          title: selectedTitle,
-          tags: selectedTags,
-          text: selectedText,
-        })
-      );
+      dispatch(updateNote({ ...noteInView, ...note }));
       toast.success("Note updated!");
     }
 
@@ -79,26 +80,14 @@ const ViewNote = () => {
     dispatch(setIsViewingNote(false));
   };
 
-  useEffect(() => {
-    // Update state when a new noteInView is set
-    if (noteInView && noteInView !== "new") {
-      setSelectedTags(noteInView.tags || []);
-      setSelectedTitle(noteInView.title || "");
-      setSelectedText(noteInView.text || "");
-    } else {
-      // Reset state if noteInView is "new"
-      setSelectedTags([]);
-      setSelectedTitle("");
-      setSelectedText("");
-    }
-  }, [noteInView]);
-
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-testid="view-note-wrapper">
       <Breadcrumb />
       <Title
-        selectedTitle={selectedTitle}
-        setSelectedTitle={setSelectedTitle}
+        selectedTitle={note.title}
+        setSelectedTitle={(newTitle) =>
+          setNote((prev) => ({ ...prev, title: newTitle }))
+        }
         autoFocus={noteInView === "new"}
       />
       {noteInView &&
@@ -108,15 +97,23 @@ const ViewNote = () => {
           <div className={styles.dateWrapper}>
             <p className={styles.dateLabel}>Last Modified:</p>
             <p className={styles.dateValue}>
-              {noteInView &&
-                isValid(noteInView.updated_at) &&
-                format(new Date(noteInView.updated_at), "MMMM dd, yyyy h:mm a")}
+              {format(new Date(noteInView.updated_at), "MMMM dd, yyyy h:mm a")}
             </p>
           </div>
         )}
-      <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-      <Editor selectedText={selectedText} setSelectedText={setSelectedText} />
-      {message && <p className={styles.alert}>{message}</p>}
+      <Tags
+        selectedTags={note.tags}
+        setSelectedTags={(tags) => setNote((prev) => ({ ...prev, tags }))}
+      />
+      <Editor
+        selectedText={note.text}
+        setSelectedText={(text) => setNote((prev) => ({ ...prev, text }))}
+      />
+      {message && (
+        <p className={styles.alert} data-testid="note-alert">
+          {message}
+        </p>
+      )}
       <ViewNoteActions handleSubmit={handleSubmitNote} />
     </div>
   );

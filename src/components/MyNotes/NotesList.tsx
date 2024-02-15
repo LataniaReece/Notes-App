@@ -26,7 +26,7 @@ const styles = {
   selectedTitle: "font-bold",
   text: " text-gray-500 dark:text-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis font-light mb-3 text-sm",
   selectedText: "font-normal",
-  tagsContainer: "flex gap-2",
+  tagsContainer: "flex flex-wrap gap-2",
   tagItem:
     "rounded-lg bg-gray-100 dark:bg-gray-600 p-1 font-extralight text-xs",
   selectedTagItem: "bg-gray-100 dark:bg-gray-500",
@@ -78,6 +78,8 @@ const NotesList = () => {
     if (selectedNoteToDelete && selectedNoteToDelete.id) {
       dispatch(deleteNote(selectedNoteToDelete.id));
       setSelectedNoteToDelete(null);
+      dispatch(setNoteInView(null));
+      dispatch(setIsViewingNote(false));
       setShowDeleteNoteConfirmation(false);
       toast.success(`Note deleted!`);
     } else {
@@ -92,7 +94,7 @@ const NotesList = () => {
   };
 
   return (
-    <>
+    <div data-testid="notes-list">
       {paginatedNotes.map((note) => (
         <div
           className={classnames(styles.noteItem, {
@@ -104,6 +106,7 @@ const NotesList = () => {
               noteInView && noteInView !== "new" && note.id === noteInView.id,
           })}
           key={note.id}
+          data-testid={`note-${note.id}`}
           onClick={() => handleViewNote(note)}
         >
           <div className="flex justify-between">
@@ -115,6 +118,7 @@ const NotesList = () => {
             <button
               onClick={(e) => handleDeleteNote(e, note)}
               className="border border-transparent lg:hover:gray lg:hover:border-gray-700 lg:hover:rounded-full lg:dark:hover:border-gray-200"
+              data-testid={`delete-button-${note.id}`}
             >
               <IoMdClose />
             </button>
@@ -180,7 +184,7 @@ const NotesList = () => {
         label="Clear Notes Confirmation"
         text={"Are you sure you want to clear all notes?"}
       />
-    </>
+    </div>
   );
 };
 

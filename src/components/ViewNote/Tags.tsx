@@ -4,7 +4,7 @@ import { useAppSelector } from "../../hooks";
 
 interface TagsProps {
   selectedTags: Note["tags"];
-  setSelectedTags: React.Dispatch<React.SetStateAction<Note["tags"]>>;
+  setSelectedTags: (tags: Note["tags"]) => void;
 }
 
 const styles = {
@@ -43,9 +43,9 @@ const Tags: FC<TagsProps> = ({ selectedTags, setSelectedTags }) => {
     tag: "Personal" | "Work" | "Study" | "Important" | "To-do" | "Journal"
   ) => {
     if (selectedTags.includes(tag)) {
-      setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
     } else {
-      setSelectedTags((prevTags) => [...prevTags, tag]);
+      setSelectedTags([...selectedTags, tag]);
     }
   };
 
@@ -62,6 +62,7 @@ const Tags: FC<TagsProps> = ({ selectedTags, setSelectedTags }) => {
                 [styles.unselectedTag]: !selectedTags.includes(tag),
               })}
               onClick={() => handleTagSelection(tag)}
+              data-testid={`tag-button-${tag}`}
             >
               {tag}
             </p>

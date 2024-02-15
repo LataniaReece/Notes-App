@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef } from "react";
 interface TitleProps {
   selectedTitle: string;
-  setSelectedTitle: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTitle: (newTitle: string) => void;
   autoFocus: boolean;
 }
 
@@ -32,6 +32,7 @@ const Title: FC<TitleProps> = ({
         value={selectedTitle}
         onChange={(e) => setSelectedTitle(e.target.value)}
         className={styles.input}
+        data-testid="note-title-input"
       />
     </div>
   );

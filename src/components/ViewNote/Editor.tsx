@@ -4,7 +4,7 @@ import { useAppSelector } from "../../hooks";
 
 interface EditorProps {
   selectedText: string;
-  setSelectedText: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedText: (text: string) => void;
 }
 
 const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
@@ -25,7 +25,11 @@ const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
   }, [theme]);
 
   return (
-    <div key={key} className={`bg-${theme === "dark" ? "gray-800" : "white"}`}>
+    <div
+      key={key}
+      className={`bg-${theme === "dark" ? "gray-800" : "white"}`}
+      data-testid="note-text-input"
+    >
       {isLoading && <p>Loading editor...</p>}
       <TinyEditor
         key={key}
