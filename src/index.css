@@ -8,6 +8,55 @@
   box-sizing: border-box;
 }
 
-.tox-notifications-container {
-  display: none !important;
+/* Base Editor Styling */
+.editor-container {
+  height: 500px;
+  margin-bottom: 70px;
+}
+
+/* Shared Styling for Editor Content and Toolbar (Light Mode Defaults) */
+.editor-container .ql-editor,
+.editor-container .ql-toolbar {
+  background-color: #ffffff;
+}
+
+.editor-container .ql-editor {
+  color: #000000; /* Black text */
+  height: 500px;
+  padding: 10px;
+}
+
+.editor-container .ql-toolbar {
+  border-bottom: 1px solid #d1d5db !important;
+}
+
+.editor-container.editor-dark .ql-toolbar .ql-formats .ql-header,
+.editor-container.editor-dark
+  .ql-toolbar
+  .ql-formats
+  .ql-header
+  .ql-picker-label
+  svg
+  .ql-stroke,
+.editor-container.editor-dark .ql-toolbar .ql-formats button svg .ql-stroke,
+.editor-container.editor-dark .ql-toolbar .ql-formats button svg .ql-fill {
+  color: white !important;
+  stroke: white !important;
+}
+
+/* Dark Mode Styling */
+.editor-dark .ql-editor,
+.editor-dark .ql-toolbar,
+.editor-dark .ql-snow .ql-picker-options {
+  background-color: #1e1e2f;
+}
+
+.editor-dark .ql-editor {
+  color: #e5e5e5;
+  height: 500px;
+  padding: 10px;
+}
+
+.editor-dark .ql-toolbar {
+  border-bottom: 1px solid #444;
 }

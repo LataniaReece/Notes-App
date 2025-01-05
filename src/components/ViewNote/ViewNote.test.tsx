@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactElement } from "react";
 import { describe, it, expect, vi } from "vitest";
-import { render as rtlRender, screen } from "@testing-library/react";
+import { render as rtlRender, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
@@ -16,14 +16,14 @@ vi.mock("react-toastify", () => ({
   },
 }));
 
-// Mock the TinyMCE React component
-vi.mock("@tinymce/tinymce-react", () => ({
-  Editor: vi.fn(({ onEditorChange, value, init }) => (
+// Mock the ReactQuill component
+vi.mock("react-quill", () => ({
+  __esModule: true,
+  default: vi.fn(({ value, onChange }) => (
     <textarea
       data-testid="mocked-editor"
       value={value}
-      onChange={(e) => onEditorChange(e.target.value)}
-      style={{ height: init.height }}
+      onChange={(e) => onChange(e.target.value)}
     />
   )),
 }));
@@ -70,7 +70,6 @@ describe("ViewNote Component", () => {
       "Please enter all fields"
     );
 
-    // Try with just one field
     const titleInput = screen.getByTestId("note-title-input");
     await userEvent.type(titleInput, "Test Title");
 
@@ -94,7 +93,12 @@ describe("ViewNote Component", () => {
 
     await userEvent.type(titleInput, "Test Title");
     await userEvent.click(personalTag);
-    // Interact with the mocked editor instead of TinyMCE
+
+    // Wait for the editor to load
+    await waitFor(() =>
+      expect(screen.queryByText("Loading editor...")).not.toBeInTheDocument()
+    );
+
     const mockedEditor = screen.getByTestId("mocked-editor");
     await userEvent.type(mockedEditor, "Test Text");
 
@@ -135,6 +139,11 @@ describe("ViewNote Component", () => {
     await userEvent.clear(titleInput);
     await userEvent.type(titleInput, "Updated Title");
 
+    // Wait for the editor to load
+    await waitFor(() =>
+      expect(screen.queryByText("Loading editor...")).not.toBeInTheDocument()
+    );
+
     const mockedEditor = screen.getByTestId("mocked-editor");
     await userEvent.clear(mockedEditor);
     await userEvent.type(mockedEditor, "Updated Text");
@@ -144,8 +153,8 @@ describe("ViewNote Component", () => {
 
     expect(toast.success).toHaveBeenCalledWith("Note updated!");
 
-    const updatedsState = store.getState();
-    const updatedNote = updatedsState.notes.notes.find(
+    const updatedState = store.getState();
+    const updatedNote = updatedState.notes.notes.find(
       (note: Note) => note.id === initialNote.id
     );
 

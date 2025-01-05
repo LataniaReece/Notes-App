@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { Editor as TinyEditor } from "@tinymce/tinymce-react";
+import ReactQuill from "react-quill";
 import { useAppSelector } from "../../hooks";
+
+import "react-quill/dist/quill.snow.css";
 
 interface EditorProps {
   selectedText: string;
@@ -11,66 +13,29 @@ const Editor: FC<EditorProps> = ({ selectedText, setSelectedText }) => {
   const { theme } = useAppSelector((state) => state.notes);
   const [key, setKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
   const handleChange = (content: string) => {
     setSelectedText(content);
   };
 
-  const handleEditorInit = () => {
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     setIsLoading(true);
-    setKey((prevKey) => prevKey + 1); // Remount the TinyEditor component
+    setKey((prevKey) => prevKey + 1);
+    setTimeout(() => setIsLoading(false), 300);
   }, [theme]);
 
   return (
     <div
       key={key}
-      className={`bg-${theme === "dark" ? "gray-800" : "white"}`}
+      className={`editor-container ${
+        theme === "dark" ? "editor-dark" : "editor-light"
+      }`}
       data-testid="note-text-input"
     >
       {isLoading && <p>Loading editor...</p>}
-      <TinyEditor
-        key={key}
-        apiKey={import.meta.env.VITE_TINY_API_KEY}
-        onInit={handleEditorInit}
-        value={selectedText}
-        init={{
-          height: 500,
-          menubar: false,
-          skin: theme === "dark" ? "oxide-dark" : "oxide",
-          content_css: theme === "dark" ? "dark" : "",
-          plugins: [
-            "advlist",
-            "autolink",
-            "lists",
-            "link",
-            "image",
-            "charmap",
-            "preview",
-            "anchor",
-            "searchreplace",
-            "visualblocks",
-            "code",
-            "fullscreen",
-            "insertdatetime",
-            "media",
-            "table",
-            "code",
-            "help",
-            "wordcount",
-          ],
-          toolbar:
-            "undo redo | blocks | " +
-            "bold italic forecolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help",
-          content_style:
-            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-        }}
-        onEditorChange={handleChange}
-      />
+      {!isLoading && (
+        <ReactQuill theme="snow" value={selectedText} onChange={handleChange} />
+      )}
     </div>
   );
 };
