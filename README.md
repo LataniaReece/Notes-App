@@ -11,14 +11,14 @@ https://latania-notesapp.netlify.app
 
 ## Key Features
 
-- **Rich Text Editing**: Leverage TinyMCE for a versatile note-taking experience.
+- **Rich Text Editing**: Leverage ReactQuill for a versatile note-taking experience.
 - **Theme Support**: Easily switch between light and dark themes for comfortable viewing under any lighting conditions.
 - **Responsive Design**: Tailwind CSS ensures the app looks great on both desktop and mobile.
 - **Robust Testing**: Playwright tests ensure reliability and help maintain high code quality.
 
 ## What I Learned
 
-Building the Notes App was an insightful journey. Tailwind CSS provided a fresh perspective on styling, emphasizing utility over predefined components. Integrating TinyMCE challenged me to implement rich text editing within a React ecosystem, enhancing the app's functionality.
+Building the Notes App was an insightful journey. Tailwind CSS provided a fresh perspective on styling, emphasizing utility over predefined components. Integrating ReactQuill challenged me to implement rich text editing within a React ecosystem, enhancing the app's functionality.
 
 The exploration of the `classnames` package for theme management was a testament to the power of dynamic class binding in React, simplifying the implementation of multi-theme support.
 
